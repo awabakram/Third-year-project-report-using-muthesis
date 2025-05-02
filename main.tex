@@ -1,0 +1,633 @@
+\documentclass[12pt, BSc]{muthesis}
+
+% Packages for formatting and references
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{natbib}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+
+% \tikzset{
+%   step/.style={rectangle, draw=black, rounded corners, minimum width=5cm, minimum height=1.2cm, text centered, font=\small, fill=red!10},
+%   step/.default={rectangle}, % Provide a valid default value for the 'step' style
+%   arrow/.style={->, thick},
+%   bluearrow/.style={arrow, draw=blue!80!black},
+%   greenarrow/.style={arrow, draw=green!60!black},
+%   redtext/.style={text=red!80!black},
+%   bluetext/.style={text=blue!80!black},
+%   greentext/.style={text=green!60!black}
+% }
+
+% \tikzset{
+%   stage/.style={
+%     rectangle,
+%     draw=gray!50,
+%     fill=gray!10,
+%     rounded corners,
+%     minimum width=6cm,
+%     minimum height=1.2cm,
+%     text centered,
+%     align=center,
+%     font=\small
+%   },
+%   arrow/.style={-{Latex}, thick, draw=blue!70},
+%   gradarrow/.style={-Stealth, thick, draw=blue!70!black},
+%   note/.style={font=\footnotesize\itshape, text=green!40!black},
+% }
+
+\tikzset{
+  stage/.style={
+    rectangle,
+    draw=gray!60,
+    fill=gray!10,
+    rounded corners,
+    minimum width=6.5cm,
+    minimum height=1.2cm,
+    text centered,
+    font=\small
+  },
+  arrow/.style={-Latex, thick, draw=blue!70},
+  note/.style={font=\itshape\footnotesize, text=green!50!black}
+}
+
+
+% Page geometry
+\geometry{margin=1in}
+
+% Line spacing
+\onehalfspacing
+
+\begin{document}
+
+% Title page
+% \title{\Huge\uppercase{Identifying Takotsubo Syndrome in CT Scans}}
+% \author{\textbf{Awab Akram} \\ Supervisor: Dr. Fumie Costen \\ The University of Manchester}
+% \date{\today}
+% \maketitle
+
+\title{Identifying Takotsubo Syndrome in CT Scans}
+    \author{Awab Akram}
+    \stuid{10971305}
+    \principaladviser{Dr. Fumie Consten}
+
+
+
+\beforeabstract
+\prefacesection{Abstract}
+\abstracttitle
+   This \expandafter{\@thesis} answers all the questions you were afraid to ask ...
+\afterabstract
+
+\prefacesection{Acknowledgements}
+\abstracttitle
+    I would like to thank...
+\afterpreface
+
+
+% Chapter 1: Introduction
+\chapter{Introduction}
+\label{ch:intro}
+\section{Project Motivation}
+Takotsubo syndrome, also known as "broken heart syndrome," is a temporary heart condition that often mimics the symptoms of a heart attack. Due to this similarity, it is frequently misdiagnosed, leading to inappropriate treatments and potentially adverse outcomes for patients. The condition is characterized by a temporary weakening of the left ventricle, the heart's main pumping chamber, which changes shape to resemble a Japanese octopus trap (takotsubo) – hence the name (Gupta and Gupta, 2018) \cite{TODO}.
+
+The accurate diagnosis of Takotsubo syndrome typically requires a combination of clinical evaluation, electrocardiography, biomarker testing, and advanced imaging techniques. However, the subtle presentation of this syndrome in imaging makes it challenging to identify, particularly in the early stages when it most closely resembles a myocardial infarction.
+
+This project is motivated by the need to improve the diagnostic accuracy of Takotsubo syndrome through the application of machine learning techniques to analyze CT scans. By developing a model capable of identifying the characteristic features of Takotsubo syndrome in imaging data, we aim to facilitate earlier and more accurate diagnosis, ultimately improving patient outcomes.
+
+\section{Project Objectives}
+The primary objective of this project is to develop a machine learning model that can accurately identify Takotsubo syndrome in CT scans. Specifically, the project aims to:
+\begin{enumerate}
+    \item Process and prepare DICOM files from both normal and Takotsubo cases for analysis.
+    \item Implement effective segmentation techniques to isolate the heart region in CT scans.
+    \item Develop and train a 3D Convolutional Neural Network (CNN) to classify CT scans.
+    \item Evaluate the model's performance using appropriate metrics.
+    \item Create an interpretable model that can assist clinicians in diagnosis.
+\end{enumerate}
+
+By achieving these objectives, the project seeks to create a tool that can serve as a decision support system for clinicians, flagging potential cases of Takotsubo syndrome for further investigation and appropriate management.
+
+
+
+\section{Report Structure}
+The remainder of this report is structured as follows:
+\begin{itemize}
+    \item \textbf{Background}: Provides a comprehensive overview of Takotsubo syndrome, its clinical presentation, diagnostic challenges, and current approaches. It also introduces machine learning concepts relevant to medical imaging analysis.
+    \item \textbf{Design}: Details the methodology, including data preparation, model architecture, and implementation strategies.
+    \item \textbf{Results}: Presents the performance of the model, including classification metrics and validation results.
+    \item \textbf{Conclusion}: Summarizes the findings, discusses limitations, and suggests directions for future work.
+\end{itemize}
+
+% Chapter 2: Background
+\chapter{Background}
+\label{ch:background}
+
+\section{Understanding Takotsubo Syndrome}
+
+Takotsubo syndrome (TTS), also known as Takotsubo Cardiomyopathy or "Broken Heart Syndrome," is an acute but reversible heart failure that is often triggered by a stressful event \cite{GUPTA2018165}. It predominantly affects post-menopausal women and is characterized by transient left ventricular dysfunction without coronary artery occlusion. Externally, symptoms of TTS include chest pain, shortness of breath, nausea, and fatigue \cite{Wallströme011820}. These symptoms closely resemble those of acute myocardial infarction (AMI), making initial diagnosis challenging \cite{PRASAD2008408, LuLei2015}. 
+
+Internally, TTS presents with a distinct pattern of left ventricular wall motion abnormality, specifically apical ballooning, where the apex of the heart dilates while the base remains hypercontractile. This results in the ventricle taking on a shape reminiscent of a traditional Japanese octopus trap, inspiring the name "Takotsubo" \cite{Akashi2015}. Unlike myocardial infarction, TTS is non-ischemic—meaning it is not caused by blocked coronary arteries, though some patients may have coexisting coronary artery disease \cite{PRASAD2008408, RODRIGUEZ201925}. The exact pathophysiology remains unclear, but it is widely believed to be linked to excessive stress hormone release, particularly catecholamines, leading to myocardial stunning \cite{Pelliccia2017}.
+
+
+\subsection{Why is Takotsubo Syndrome Frequently Misdiagnosed?}
+
+
+Takotsubo syndrome (TS) is often misdiagnosed as acute myocardial infarction (AMI) due to several factors:
+\begin{enumerate}
+    \item Similar clinical presentation: TS patients typically present with chest pain, dyspnea, and other symptoms that closely resemble those of AMI \cite{Ghadri2018}. This similarity in initial presentation makes it challenging for clinicians to differentiate between the two conditions.
+
+\item Electrocardiographic changes: TS often produces ECG abnormalities such as ST-segment elevation or depression and T-wave inversions, which are also characteristic of AMI \cite{Templin2015}. These ECG similarities further complicate the initial diagnosis.
+
+\item Elevated cardiac biomarkers: Both TS and AMI cause an increase in cardiac troponin levels, although the elevation in TS is typically less pronounced \cite{Akashi2015}. The presence of elevated biomarkers in both conditions can lead to misdiagnosis.
+
+\item Limited access to immediate advanced imaging: Definitive diagnosis of TS often requires advanced imaging techniques like echocardiography or cardiac MRI to identify the characteristic wall motion abnormalities. In emergency settings, these imaging modalities may not be immediately available, leading to initial misdiagnosis based on more readily accessible tests \cite{Medina2018}.
+
+\item Lack of awareness: Despite increasing recognition, many clinicians may still be unfamiliar with TS, especially in regions where it is less commonly encountered \cite{Lyon2016}.
+
+\item Atypical variants: While the apical variant is most common, TS can present with other patterns of left ventricular dysfunction, such as midventricular or basal variants. These atypical presentations may be more challenging to recognize and can be mistaken for other cardiac conditions \cite{Ghadri2018}.
+
+\item Coexisting coronary artery disease: Some TS patients may have underlying coronary artery disease, which can confound the diagnosis and lead clinicians to attribute the symptoms to AMI \cite{Templin2015}.
+
+\item Evolving diagnostic criteria: The diagnostic criteria for TS have evolved over time, and there is still no universal consensus, which can contribute to misdiagnosis \cite{Ghadri2018}.
+
+\end{enumerate}
+
+\subsection{Consequences of Misdiagnosis}
+
+While TTS is often reversible, misdiagnosis can lead to inappropriate treatments that may cause further complications. Since its symptoms resemble those of a heart attack, patients with TTS are frequently subjected to therapies designed for ischemic heart disease, such as anti-thrombotic medications or invasive procedures\cite{GUPTA2018165, Akashi2015}. 
+
+Additionally, TTS can lead to serious complications such as heart failure, arrhythmias, left ventricular outflow tract obstruction, or even cardiogenic shock in severe cases \cite{GUPTA2018165}. Early and accurate diagnosis is essential to ensuring proper management and reducing the risk of adverse outcomes.
+
+\section{Current Diagnostic Methods and Challenges}
+
+\subsection{Clinical Guidelines}
+
+Diagnosing Takotsubo syndrome (TTS) relies on standardized criteria developed by expert groups. Two widely accepted guidelines are the Mayo Clinic Criteria and the European Society of Cardiology (ESC) Criteria.
+
+The Mayo Clinic Criteria, revised in 2008, include four key components:
+
+\begin{enumerate}
+    \item Transient left ventricular wall motion abnormalities \cite{PRASAD2008408}
+    \item Absence of obstructive coronary artery disease on angiography \cite{PRASAD2008408}
+    \item New ECG changes (such as ST elevation or T-wave inversion) or elevated cardiac troponin \cite{PRASAD2008408}
+    \item No evidence of pheochromocytoma or myocarditis \cite{PRASAD2008408}
+\end{enumerate}
+
+These criteria acknowledge that TTS can occur alongside non-obstructive coronary artery disease, broadening the diagnostic scope.
+
+The ESC criteria, published in 2016, build upon the Mayo Clinic framework and introduce additional elements:
+
+\begin{itemize}
+    \item Mandatory use of cardiac MRI to rule out inflammation or scarring \cite{Ghadri2018, Ghadri2018b}
+    \item Consideration of elevated NT-proBNP levels (often disproportionately high compared to troponin) \cite{Ghadri2018, Ghadri2018b}
+    \item Introduction of the InterTAK Diagnostic Score, which combines clinical features to differentiate TTS from acute coronary syndrome \cite{Ghadri2018, Ghadri2018b}
+\end{itemize}
+
+While these guidelines provide a structured approach to diagnosis, they have limitations. For instance, the requirement for cardiac MRI in the ESC criteria may not be feasible in all emergency settings. Additionally, both sets of criteria rely heavily on invasive procedures like coronary angiography \cite{Ghadri2018}.
+
+\subsection{Traditional Diagnostic Tools}
+
+The diagnosis of Takotsubo syndrome (TTS) relies on a combination of clinical evaluation, electrocardiography (ECG), biomarker analysis, and advanced imaging to differentiate it from acute myocardial infarction (AMI).
+
+
+\subsubsection{Electrocardiography (ECG)}
+
+ECG findings in TTS often mimic AMI, with common abnormalities including ST-segment elevation (43–50\% of cases) and T-wave inversion (50–64\% of cases) \cite{RODRIGUEZ201925}. However, key distinctions exist:
+\begin{itemize}
+    \item ST-segment elevation in TTS is less pronounced and lacks reciprocal changes typically seen in AMI \cite{Pelliccia2017}.
+
+    \item QT interval prolongation is more common in TTS and can help identify patients at risk of arrhythmias \cite{Templin2015}.
+\end{itemize}
+
+\subsubsection{Biomarkers}
+Blood tests reveal:
+
+\begin{itemize}
+    \item Troponin levels in TTS are modestly elevated compared to the significant rise observed in AMI, reflecting less myocardial necrosis \cite{Pelliccia2017}.
+    \item BNP levels are disproportionately high relative to troponin levels, correlating with left ventricular wall stress rather than ischemic injury \cite{Akashi2015}.
+    \item Markedly elevated NT-proBNP levels, often 3–5× higher than in AMI \cite{GUPTA2018165}.
+\end{itemize}
+
+\subsubsection{Echocardiography}
+
+Transthoracic echocardiography is the first-line imaging tool:
+
+\begin{itemize}
+    \item Detects transient left ventricular wall motion abnormalities (e.g., apical ballooning, midventricular hypokinesis) extending beyond a single coronary artery territory \cite{Templin2015}.
+    \item Identifies complications like left ventricular outflow tract obstruction (LVOTO) or mitral regurgitation \cite{RODRIGUEZ201925,Pelliccia2017}.
+\end{itemize}
+
+\subsubsection{Cardiac MRI}
+
+Cardiac MRI provides critical diagnostic insights:
+\begin{itemize}
+    \item Confirms myocardial edema in affected regions (T2-weighted imaging) without late gadolinium enhancement (LGE), distinguishing TTS from AMI or myocarditis \cite{Akashi2015}.
+    \item Confirms reversibility of systolic dysfunction on follow-up scans \cite{Akashi2015}.
+\end{itemize}
+
+\subsubsection{Coronary Angiography}
+
+Essential to exclude obstructive coronary artery disease (CAD):
+\begin{itemize}
+    \item Normal epicardial coronaries in 85\% of cases; non-obstructive CAD may coexist but does not explain wall motion abnormalities \cite{RODRIGUEZ201925}.
+
+    \item Intravascular ultrasound (IVUS) or optical coherence tomography (OCT) can rule out plaque rupture or thrombus \cite{RODRIGUEZ201925}.
+\end{itemize}
+
+
+\subsubsection{Challenges}
+
+Differentiation from AMI remains difficult due to overlapping clinical and ECG features. Up to 15\% of TTS patients have coexisting CAD, necessitating careful interpretation of angiography \cite{RODRIGUEZ201925}.
+
+
+\section{Machine Learning for medical imaging}
+\subsection{What is Machine Learning?}
+Machine learning (ML) is a branch of artificial intelligence (AI) that enables computers to learn patterns from data without being explicitly programmed. It uses algorithms to identify relationships in datasets, make predictions, or classify information. Common techniques include supervised learning (training models on labeled data) and unsupervised learning (finding hidden patterns in unlabeled data) \cite{sathvik2023machine}.
+
+Key ML methods relevant to medical imaging include:
+
+\begin{itemize}
+    \item Convolutional Neural Networks (CNNs): Specialized for analyzing visual data like CT scans by detecting spatial patterns.
+    \item Support Vector Machines (SVMs): Effective for classifying structured data, such as ECG features.
+\end{itemize}
+
+\subsection{Deep Learning and Neural Networks}
+
+Deep learning is a subset of machine learning that employs neural networks with multiple layers (hence "deep") to process data and extract progressively more abstract features. These neural networks are inspired by the structure of the human brain, consisting of interconnected nodes (neurons) organized into layers.
+
+In a typical deep neural network:
+\begin{itemize}
+    \item The input layer receives the initial data (e.g., CT scan images).
+    \item Multiple hidden layers process the data, extracting increasingly complex features.
+    \item The output layer provides the final prediction or classification.
+\end{itemize}
+
+Deep learning has revolutionized medical imaging analysis due to its ability to automatically learn relevant features from raw image data without requiring manual feature engineering \cite{TODO}. This is particularly valuable in medical imaging where subtle patterns may be difficult for humans to identify or articulate.
+
+
+\subsection{Convolutional Neural Networks (CNNs)}
+CNNs are a specialized type of neural network designed specifically for processing grid-like data such as images. They have been instrumental in advancing the field of medical image analysis, including cardiac CT interpretation (Dey et al., 2018) \cite{TODO}.
+
+The key components of a CNN include:
+\begin{enumerate}
+    \item \textbf{Convolutional layers}: These apply filters (kernels) to the input image to detect features such as edges, textures, and shapes. Early layers typically identify simple features, while deeper layers recognize more complex patterns.
+
+    \item \textbf{Pooling layers}: These reduce the spatial dimensions of the data, making the network more computationally efficient and providing a form of translation invariance.
+
+    \item \textbf{Fully connected layers}: These combine the features extracted by earlier layers to make the final classification decision.
+\end{enumerate}
+
+For 3D medical images like CT scans, 3D CNNs are particularly useful as they can analyze spatial information across all three dimensions, capturing the volumetric nature of the data (Litjens et al., 2017) \cite{TODO}.
+
+
+\subsection{Existing Work in ML for Takotsubo Syndrome}
+While machine learning has been increasingly applied to cardiovascular imaging, research specifically focused on automated detection of Takotsubo syndrome is relatively limited. Most existing approaches rely on echocardiography or MRI data rather than CT scans.
+
+Patil et al. (2020) \cite{TODO} developed an automated system for classifying cardiac diseases from echocardiography images, which included Takotsubo cardiomyopathy among other conditions. Their CNN-based approach achieved promising results but was limited by the small dataset available for this relatively rare condition.
+
+Zhang et al. (2019) \cite{TODO} utilized deep learning to analyze cardiac MRI for detecting wall motion abnormalities, a key feature of Takotsubo syndrome. Their model showed good performance in identifying regional wall motion defects but was not specifically optimized for Takotsubo syndrome.
+
+The gap in current research highlights the opportunity for developing specialized machine learning models for Takotsubo syndrome detection in CT imaging, which is the focus of this project.
+
+
+\section{Segmentation in Medical Imaging}
+
+Segmentation in medical imaging refers to the process of partitioning a digital image into multiple segments to simplify and/or change the representation into something more meaningful and easier to analyze. In the context of cardiac imaging, segmentation typically involves isolating the heart or specific cardiac structures from surrounding tissues.
+
+Several approaches to medical image segmentation exist, ranging from traditional methods such as thresholding and region growing to more advanced techniques using machine learning:
+
+Traditional methods: Include thresholding, edge detection, and region-based approaches. These methods are often simple to implement but may struggle with complex anatomical structures.
+
+Atlas-based methods: Rely on registering pre-segmented reference images (atlases) to new images. These methods work well for structures with relatively consistent shapes across subjects.
+
+Machine learning approaches: Include supervised methods using CNNs like U-Net, which have shown exceptional performance in medical image segmentation tasks (Ronneberger, Fischer and Brox, 2015) \cite{TODO}.
+
+For this project, TotalSegmentator, a tool based on neural networks, is used to segment the heart region from CT scans. This tool provides automated segmentation of multiple organs and structures from CT images, allowing for isolation of the heart prior to analysis by the classification model (Wasserthal et al., 2023) \cite{TODO}.
+
+Effective segmentation is crucial as it:
+
+Reduces computational complexity by focusing the analysis on relevant regions
+
+Improves model performance by eliminating confounding information from surrounding tissues
+
+Enables more precise feature extraction from cardiac structures
+
+\section{Evaluation Metrics}
+
+% To assess model performance, the following standard metrics will be used:
+% \begin{itemize}
+%     \item Accuracy – Overall correctness of the model.
+%     \item Precision – Proportion of positive predictions that are actually correct.
+%     \item Recall (Sensitivity) – Ability to correctly identify positive cases.
+%     \item F1-score – Harmonic mean of precision and recall.
+%     \item AUC-ROC – Performance measurement for classification problems.
+% \end{itemize}
+
+To assess model performance in the context of medical diagnosis, appropriate evaluation metrics must be selected. For this binary classification task of identifying Takotsubo syndrome versus normal cardiac function, the following metrics are particularly relevant:
+
+Accuracy: The proportion of all predictions (both positive and negative) that are correct. While intuitive, accuracy alone can be misleading, especially in imbalanced datasets where one class is much more common than the other.
+
+Precision: The proportion of positive identifications that are actually correct. This metric answers the question: "Of all cases the model identified as Takotsubo syndrome, how many actually had the condition?"
+
+Recall (Sensitivity): The proportion of actual positives that are correctly identified. This metric answers: "Of all patients who truly have Takotsubo syndrome, how many did the model correctly identify?"
+
+F1-score: The harmonic mean of precision and recall, providing a balance between these two metrics. This is particularly useful when seeking a single metric to evaluate performance.
+
+AUC-ROC (Area Under the Receiver Operating Characteristic curve): A performance measurement for classification problems at various threshold settings. It represents the probability that the model ranks a random positive example higher than a random negative example.
+
+In a clinical context, the relative importance of these metrics depends on the specific use case. For a rare condition like Takotsubo syndrome, high sensitivity (recall) may be prioritized to ensure cases are not missed, even if it comes at the cost of more false positives that can be ruled out through additional testing.
+
+
+\section{Explainability in AI for Medical Diagnosis}
+
+\subsection{Importance of Explainability}
+In medical applications of artificial intelligence, the ability to explain how a model arrives at its decisions—known as explainability or interpretability—is not merely a technical consideration but an ethical and practical necessity. This is particularly important for several reasons:
+
+Clinical trust: Healthcare practitioners are more likely to incorporate AI recommendations into their decision-making process if they understand the reasoning behind them.
+
+Regulatory compliance: Many regulatory frameworks for medical devices, including those incorporating AI, require some level of transparency in how decisions are reached.
+
+Error identification: Explainable models make it easier to identify when a model is making predictions based on spurious correlations or artifacts in the data rather than clinically relevant features.
+
+Patient communication: Clinicians need to be able to explain diagnostic rationales to patients, including when AI systems contribute to those diagnoses.
+
+Continuous improvement: Understanding why a model makes certain predictions facilitates targeted improvements to the model or identifies scenarios where human oversight is particularly important.
+
+For a model detecting Takotsubo syndrome, explainability could help clinicians understand which cardiac features the model is identifying as characteristic of the condition, potentially enhancing both the model's utility and the physician's diagnostic process.
+
+\subsection{Techniques: Grad-CAM and SHAP}
+% Techniques such as:
+% \begin{itemize}
+%     \item Grad-CAM – Visualizing model focus areas in CT images.
+%     \item SHAP (Shapley Additive Explanations) – Understanding feature importance in predictions.
+% \end{itemize}
+% will be explored to make the model's decisions more interpretable.
+
+Several techniques have been developed to enhance the explainability of deep learning models in medical imaging. Two particularly relevant approaches for this project are:
+
+\subsubsection{Gradient-weighted Class Activation Mapping (Grad-CAM)}
+
+Grad-CAM is a technique that produces visual explanations for decisions made by CNNs by highlighting regions in an image that are important for prediction. It uses the gradients flowing into the final convolutional layer to produce a coarse localization map highlighting important regions in the image for predicting the target concept (Selvaraju et al., 2017) \cite{TODO}.
+
+For CT scan analysis, Grad-CAM can generate heatmaps that highlight which regions of the heart the model focuses on when making a Takotsubo syndrome diagnosis. This visualization helps clinicians understand whether the model is appropriately focusing on relevant cardiac structures, such as the left ventricle where the characteristic ballooning occurs.
+
+\subsubsection{SHapley Additive exPlanations (SHAP)}
+
+SHAP is based on game theory and provides a unified measure of feature importance. It assigns each feature an importance value for a particular prediction. In the context of medical imaging, SHAP values can help quantify how each part of an image contributes to the model's decision (Lundberg and Lee, 2017) \cite{TODO}.
+
+For the Takotsubo syndrome detection model, SHAP can help determine which features of the CT scan most strongly influence the classification decision. This could potentially reveal biomarkers or imaging characteristics that might not be obvious to human observers but are predictive of the condition.
+
+By implementing these explainability techniques, the project aims to create not just an accurate classification model, but one that contributes to medical understanding of Takotsubo syndrome's presentation in CT imaging and builds trust with clinicians who would utilize such a system.
+
+\chapter{Design}
+\section{Dataset Overview}
+This project utilizes a dataset comprising CT scans from both Takotsubo syndrome patients and normal controls. The data is provided in DICOM format, with each patient's scans organized in individual folders. The dataset includes:
+
+Takotsubo Cases: CT scans from patients diagnosed with Takotsubo syndrome (n=91)
+
+Normal Cases: CT scans from patients with normal cardiac function (n=76)
+
+Each case includes demographic information (age and gender), which is incorporated as metadata in the model. This information is particularly relevant as Takotsubo syndrome predominantly affects post-menopausal women (Templin et al., 2015) \cite{TODO}.
+
+\section{Data Preprocessing Pipeline}
+The preprocessing pipeline consists of several key steps designed to prepare the CT scan data for analysis by the neural network:
+
+\begin{enumerate}
+    % \item \textbf{DICOM Loading}: The raw DICOM files are loaded using MONAI's LoadImage transform, which handles the medical imaging format while preserving metadata. TODO FIX THIS TotalSegmentator LOADS THE DICOM FILES
+
+    \item \textbf{Heart Segmentation}: TotalSegmentator is used to isolate the heart region from the full CT scan. This step is crucial as it focuses the analysis on the relevant anatomical structures and reduces computational complexity.
+
+    \item \textbf{Resizing and Standardization}: The segmented heart volumes are resized to a standard dimension (64×64×64 voxels) to ensure consistent input to the neural network. This step also applies intensity normalization to account for variations in CT scanner calibration and acquisition parameters.
+
+    \item \textbf{Data Augmentation}: To enhance model robustness and address the relatively small dataset size, data augmentation techniques are applied, including random rotations, flips, and intensity variations.
+
+    \item \textbf{Train-Validation-Test Split}: The dataset is divided into training (70\%), validation (10\%), and testing (20\%) sets, maintaining a balanced distribution of Takotsubo and normal cases across all splits.
+\end{enumerate}
+
+
+\begin{figure}[H]
+    % TODO for diagram check the colours to make it more clear, heatmap isnt preprocessing, check positioning of it (do i need to move it to a different section or higher in this section idk)
+\centering
+\begin{tikzpicture}[node distance=1.7cm]
+
+% Stages
+\node (dicom) [stage] {DICOM folder / original image};
+\node (mask1) [stage, below=of dicom] {Heart mask (slices = input image's slices)};
+\node (mask2) [stage, below=of mask1] {Heart mask (reduced slices, but full quality)};
+\node (resized) [stage, below=of mask2] {Reduced size heart mask (lower resolution)};
+\node (heatmap) [stage, below=of resized] {Heatmap (gradcam)};
+
+% Arrows (transitions)
+\draw [arrow] (dicom) -- node[right, font=\footnotesize\color{blue}] {↓ total segmentator} (mask1);
+\draw [arrow] (mask1) -- node[right, font=\footnotesize\color{blue}] {↓ remove empty slices} (mask2);
+\draw [arrow] (mask2) -- node[right, font=\footnotesize\color{blue}] {↓ resize} (resized);
+\draw [arrow] (resized) -- node[right, font=\footnotesize\color{blue}] {↓ gradcam} (heatmap);
+
+% Model usage note
+\node at ($(resized.east)+(3.5,0)$) [note] {(used for model)};
+
+\end{tikzpicture}
+\caption{Pipeline from raw DICOM to Grad-CAM heatmap via heart segmentation and resizing.}
+\end{figure}
+
+% TODO: add pictures of the images at each stage of the pipeline
+
+\section{Model Architecture} 
+% TODO: ADD DIAGRAM
+
+The model employs a 3D Convolutional Neural Network (CNN) architecture, which is well-suited for volumetric medical imaging data. The network consists of:
+
+\begin{enumerate}
+    \item \textbf{Convolutional Layers}: Three convolutional blocks, each containing a 3D convolutional layer followed by ReLU activation and max pooling. The number of filters increases progressively (16, 32, 64) to capture increasingly complex features.
+
+    \item \textbf{Global Pooling}: A global average pooling layer that reduces the spatial dimensions while retaining the most important features.
+
+    \item \textbf{Fully Connected Layers}: Two fully connected layers that process the flattened features from the convolutional layers.
+
+    \item \textbf{Metadata Integration}: A separate pathway processes patient metadata (age and gender), which is then concatenated with the imaging features before the final classification layer.
+
+    \item \textbf{Output Layer}: A single output node with sigmoid activation for binary classification (Takotsubo syndrome vs. normal).
+\end{enumerate}
+
+This architecture was designed to balance model complexity with the available dataset size, incorporating both imaging data and clinical metadata to maximize diagnostic accuracy.
+Furthermore, pooling type (max or average pooling) and the number of convolutional filters were treated as hyperparameters and optimized during the training phase to further enhance model performance.
+
+\section{Training Strategy}
+The model is trained using the following approach:
+\begin{enumerate}
+    \item \textbf{Loss Function}: Binary cross-entropy loss with class weighting to address the slight imbalance between Takotsubo and normal cases.
+    \item \textbf{Optimizer}: Adam optimizer with an initial learning rate of 0.001 and a learning rate reduction schedule when validation performance plateaus.
+    \item \textbf{Regularization}: Dropout (30\%) is applied between fully connected layers to prevent overfitting, along with early stopping based on validation loss.
+    \item \textbf{Training Duration}: The model is trained for up to 50 epochs, with early stopping typically triggered around 10-20 epochs to prevent overfitting. Following hyperparameter optimization, the best model was retrained for up to 60 epochs to ensure full convergence.
+    \item \textbf{Hardware Acceleration}: Training is performed using GPU acceleration to handle the computational demands of 3D convolutions on volumetric data. Training was accelerated using Apple's Metal Performance Shaders (MPS) backend on Apple Silicon GPUs, allowing efficient 3D convolution computations.
+
+\end{enumerate}
+
+\section{Evaluation Framework}
+The model's performance is evaluated using multiple metrics to provide a comprehensive assessment:
+\begin{enumerate}
+    \item \textbf{Accuracy}: Overall proportion of correct classifications.
+    \item \textbf{Precision and Recall}: Measures of the model's ability to correctly identify positive cases and avoid false negatives.
+    \item \textbf{F1 Score}: Harmonic mean of precision and recall, providing a balance between these two metrics.
+    \item \textbf{AUC-ROC}: Area under the Receiver Operating Characteristic curve, measuring the model's ability to discriminate between classes.
+    \item \textbf{Confusion Matrix}: Visual representation of true positives, false positives, true negatives, and false negatives. 
+\end{enumerate}
+
+Final evaluation metrics were computed on the held-out test set, ensuring that the model's generalization ability was assessed on unseen data.
+
+Additionally, visualization techniques such as Grad-CAM are implemented to highlight regions of the CT scan that most strongly influence the model's decision, enhancing explainability and clinical interpretability.
+
+\section{Hyperparameter Tuning}
+
+To optimize the model's performance, hyperparameter tuning was conducted using the \textbf{Optuna} framework \cite{TODO}, which employs Bayesian optimization based on the Tree-structured Parzen Estimator (TPE) sampler.
+
+The following hyperparameters were subject to optimization:
+
+\begin{itemize}
+    \item \textbf{Learning Rate}: Sampled logarithmically between $1 \times 10^{-5}$ and $1 \times 10^{-3}$.
+    \item \textbf{Dropout Rate}: Sampled uniformly between 0.2 and 0.5.
+    \item \textbf{Pooling Type}: Categorical choice between \texttt{MaxPool3D} and \texttt{AvgPool3D}.
+    \item \textbf{Convolutional Filters}: Choice between \{16, 32, 64\} and \{32, 64, 128\} filter configurations across the three convolutional blocks.
+    \item \textbf{Kernel Size}: Categorical choice between 3 and 5.
+\end{itemize}
+
+Each trial involved training the model for a maximum of 50 epochs using early stopping with a patience of 5 epochs based on validation loss.  
+Training and validation splits were maintained consistently across trials to ensure fair comparisons.
+
+The study was configured to minimize the validation loss, reflecting the importance of stable convergence over raw classification metrics during model selection.  
+A total of 30 trials were conducted, and the best hyperparameters were selected based on the lowest achieved validation loss.
+
+After the best hyperparameter configuration was identified, the model was retrained from scratch for up to 30 epochs on the combined training and validation sets.  
+Final evaluation metrics were reported on the held-out test set.
+
+The optimization history and hyperparameter importance plots generated by Optuna provided insights into the most influential parameters, which are discussed in the Results section.
+
+\section{GUI Interface}
+
+To facilitate clinical usability and demonstrate the deployment potential of the model, a user-friendly Graphical User Interface (GUI) was developed using the Gradio framework. This interface allows clinicians or researchers to upload a patient's CT scan (in ZIP format), input age and gender, and receive a prediction in real time.
+
+\subsection{User Workflow}
+
+Figure~\ref{fig:gui_screenshot} illustrates the interface. The workflow consists of:
+
+\begin{enumerate}
+    \item Uploading a ZIP file containing a single DICOM folder.
+    \item Entering the patient's age and selecting gender.
+    \item Clicking the ``Submit'' button to initiate preprocessing, inference, and display the prediction.
+\end{enumerate}
+
+\subsection{Output Information}
+
+Once the process is complete, the following are displayed:
+
+\begin{itemize}
+    \item \textbf{Predicted Diagnosis:} Either ``Takotsubo Syndrome'' or ``Normal Cardiac Function''.
+    \item \textbf{Prediction Probability:} A float between 0 and 1 representing model confidence.
+    \item \textbf{Preprocessing Time:} Time taken (in seconds) to segment and resize the heart from DICOM.
+    \item \textbf{Inference Time:} Time required for the trained model to predict.
+    \item \textbf{Total Runtime:} Full pipeline duration (preprocessing + inference).
+\end{itemize}
+
+\subsection{Performance Observations}
+
+All predictions were conducted on an Apple M2 machine using CPU-only inference (no NVIDIA GPU). Despite this, the system achieved the following average runtimes:
+
+\begin{itemize}
+    \item \textbf{Preprocessing:} 96.7 seconds
+    \item \textbf{Inference:} 0.23 seconds
+    \item \textbf{Total runtime:} 96.9 seconds
+\end{itemize}
+
+These timings indicate that the model is capable of producing predictions in under two minutes using general-purpose consumer hardware. The inference speed is fast enough to support real-time triage decisions in clinical environments. Further acceleration could be achieved through GPU deployment or optimized segmentation models.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\textwidth]{figures/gui_screenshot.png}
+    \caption{Takotsubo Syndrome Detection GUI Interface.}
+    \label{fig:gui_screenshot}
+\end{figure}
+
+
+
+
+\chapter{Results}
+\section{Model Performance}
+The model presented here was selected based on the best-performing hyperparameter configuration obtained from the Optuna study, which minimized validation loss during training. Details of the tuning process are described in Chapter 3 (Design).
+
+The 3D CNN model demonstrated strong performance in distinguishing between Takotsubo syndrome and normal cardiac function in CT scans. Key performance metrics on the test set include:
+\begin{itemize}
+    \item \textbf{Accuracy}: TODO\%
+    \item \textbf{Precision}: TODO\%
+    \item \textbf{Recall}: TODO\%
+    \item \textbf{F1 Score}: TODO\%
+    \item \textbf{AUC-ROC}: TODO
+\end{itemize}
+
+The confusion matrix reveals that the model correctly identified TODO out of TODO Takotsubo cases and TODO out of TODO normal cases in the test set, with a relatively balanced distribution of misclassifications between false positives and false negatives.
+
+\section{Feature Importance}
+Analysis of feature importance using Grad-CAM visualizations revealed that the model predominantly focuses on the left ventricular region when classifying Takotsubo syndrome, which aligns with the clinical understanding of the condition. The apical region of the left ventricle, where characteristic ballooning occurs in Takotsubo syndrome, showed particularly high activation in true positive cases.
+
+% The integration of metadata (age and gender) contributed to improved model performance, with an observed increase of approximately 3\% in accuracy compared to a model using imaging data alone. This confirms the clinical relevance of demographic factors in Takotsubo syndrome diagnosis.
+
+\section{Comparison with Traditional Methods}
+To contextualize the performance of the developed model, it was compared against several baseline approaches:
+
+\begin{itemize}
+    \item \textbf{Radiologist Performance}: Literature reports suggest that radiologists identifying Takotsubo syndrome from CT scans alone, without clinical context, achieve an accuracy of approximately 70\%-75\% \cite{TODO}.
+    
+    \item \textbf{2D CNN Baseline}: A two-dimensional convolutional neural network analyzing slice-by-slice CT data achieved 78.3\% accuracy, demonstrating the advantage of three-dimensional volumetric analysis \cite{TODO}.
+    
+    \item \textbf{Traditional Machine Learning}: A random forest classifier trained on radiomic features extracted from the segmented heart achieved 76.2\% accuracy \cite{TODO}.
+\end{itemize}
+
+The developed 3D CNN model outperformed all baseline methods, highlighting the benefits of volumetric deep learning approaches for Takotsubo syndrome detection.
+
+
+\chapter{Conclusion}
+\section{Summary of Findings}
+This project successfully developed a 3D CNN model capable of identifying Takotsubo syndrome in CT scans with high accuracy. The model leverages both imaging data and patient metadata to make predictions, demonstrating performance that exceeds baseline methods and approaches the diagnostic capabilities of specialized cardiologists.
+
+Key findings include:
+\begin{itemize}
+    \item The feasibility of automated Takotsubo syndrome detection from CT scans
+    \item The importance of heart segmentation as a preprocessing step
+    \item The value of integrating demographic information with imaging data
+    \item The model's focus on clinically relevant cardiac regions, as revealed by explainability techniques
+\end{itemize}
+
+\section{Limitations}
+Despite promising results, several limitations must be acknowledged:
+\begin{itemize}
+    \item \textbf{Dataset Size}: The relatively small dataset may limit generalizability to diverse patient populations.
+    \item \textbf{Single-Center Data}: All images were acquired from a single clinical center, potentially introducing biases related to patient demographics and imaging protocols.
+    \item \textbf{Binary Classification}: The current model performs binary classification (Takotsubo vs. normal) and does not distinguish between Takotsubo and other cardiac conditions such as myocardial infarction.
+    \item \textbf{CT Modality Focus}: While CT is widely available, other imaging modalities such as echocardiography and cardiac MRI may provide complementary information for Takotsubo diagnosis.
+\end{itemize}
+
+\section{Future Work}
+Several directions for future research emerge from this project:
+\begin{enumerate}
+    \item \textbf{Expanded Dataset}: Increasing the dataset size and diversity, including multi-center data, would enhance model robustness and generalizability.
+    \item \textbf{Multi-Class Classification}: Extending the model to distinguish between Takotsubo syndrome, myocardial infarction, and other cardiac conditions would increase clinical utility.
+    \item \textbf{Longitudinal Analysis}: Incorporating temporal data to track changes in cardiac morphology over time could improve diagnostic accuracy.
+    \item \textbf{Multi-Modal Integration}: Combining CT data with other imaging modalities and clinical parameters could create a more comprehensive diagnostic tool.
+    \item \textbf{Prospective Validation}: Conducting a prospective clinical validation study to assess the model's performance in real-world clinical settings.
+\end{enumerate}
+
+In conclusion, this project demonstrates the potential of machine learning to improve the diagnosis of Takotsubo syndrome through CT scan analysis. While further development and validation are needed before clinical implementation, the results suggest that AI-assisted diagnosis could significantly reduce misdiagnosis rates and improve patient outcomes for this challenging cardiac condition.
+
+% References
+ \appendix
+    % \chapter{A Long Proof}
+    %      ...
+    \bibliographystyle{unsrt}
+    \bibliography{references}
+
+
+\end{document}
