@@ -94,7 +94,7 @@
 \chapter{Introduction}
 \label{ch:intro}
 \section{Project Motivation}
-Takotsubo syndrome, also known as "broken heart syndrome," is a temporary heart condition that often mimics the symptoms of a heart attack. Due to this similarity, it is frequently misdiagnosed, leading to inappropriate treatments and potentially adverse outcomes for patients. The condition is characterized by a temporary weakening of the left ventricle, the heart's main pumping chamber, which changes shape to resemble a Japanese octopus trap (takotsubo) – hence the name (Gupta and Gupta, 2018) \cite{TODO}.
+Takotsubo syndrome, also known as "broken heart syndrome," is a temporary heart condition that often mimics the symptoms of a heart attack. Due to this similarity, it is frequently misdiagnosed, leading to inappropriate treatments and potentially adverse outcomes for patients. The condition is characterized by a temporary weakening of the left ventricle, the heart's main pumping chamber, which changes shape to resemble a Japanese octopus trap (takotsubo) – hence the name \cite{GUPTA2018165}.
 
 The accurate diagnosis of Takotsubo syndrome typically requires a combination of clinical evaluation, electrocardiography, biomarker testing, and advanced imaging techniques. However, the subtle presentation of this syndrome in imaging makes it challenging to identify, particularly in the early stages when it most closely resembles a myocardial infarction.
 
@@ -210,7 +210,6 @@ While TTS is often reversible, misdiagnosis can lead to inappropriate treatments
 
 Additionally, TTS can lead to serious complications such as heart failure, arrhythmias, left ventricular outflow tract obstruction, or even cardiogenic shock in severe cases \cite{GUPTA2018165}. Early and accurate diagnosis is essential to ensuring proper management and reducing the risk of adverse outcomes.
 
-\section{Diagnostic Imaging for Takotsubo Syndrome}
 
 % \subsection{Electrocardiogram (ECG)}
 % ECG findings in TTS often mimic AMI, with common abnormalities including ST-segment elevation (43–50\% of cases) and T-wave inversion (50–64\% of cases) \cite{RODRIGUEZ201925}. However, key distinctions exist:
@@ -238,6 +237,9 @@ Additionally, TTS can lead to serious complications such as heart failure, arrhy
 
 % \subsection{Computed Tomography (CT)}
 % Cardiac CT, particularly CTA, is useful for non-invasively ruling out coronary artery disease in patients with suspected TTS. Modern multi-detector CT scanners can assess both coronary anatomy and ventricular function. Although not routinely used for functional assessment, CT can demonstrate wall motion abnormalities consistent with TTS when other modalities are unavailable or contraindicated \cite{DiazNavarro2021}.
+
+\section{Diagnostic Imaging for Takotsubo Syndrome}
+
 \subsection{Heart Tracing (ECG)}
 
 An electrocardiogram (ECG) records the electrical activity of the heart. In Takotsubo syndrome (TTS), ECG often exhibits abnormalities that mimic acute myocardial infarction, such as ST-segment elevation and T-wave inversion. Additionally, QT interval prolongation is commonly observed \cite{Gianni2006}. However, these changes are typically less pronounced than those seen in true myocardial infarctions and lack reciprocal changes, which are indicative of transmural ischemia \cite{PRASAD2008408}.
@@ -256,202 +258,304 @@ In TTS, coronary angiography or CT angiography typically shows unobstructed or o
 \subsubsection{Cardiac MRI}
 Cardiac magnetic resonance imaging can demonstrate myocardial edema and hyperemia in TTS but usually lacks the late gadolinium enhancement indicative of necrosis, thus helping to exclude myocardial infarction \cite{Kohan2014}.
 
+\subsection{Comparison of Diagnostic Modalities}
+\begin{table}[H]
+    \centering
+    \caption{Comparison of Diagnostic Modalities in TTS vs. Acute Myocardial Infarction (AMI)}
+    \label{tab:diagnostic-tts}
+    \begin{tabular}{|p{4cm}|p{5.5cm}|p{5.5cm}|}
+    \hline
+    \textbf{Modality} & \textbf{Typical Findings in TTS} & \textbf{Distinction from AMI} \\ \hline
+    
+    ECG & ST-segment elevation, T-wave inversion, prolonged QT interval \cite{Gianni2006} & Changes are less pronounced; lacks reciprocal changes \cite{PRASAD2008408} \\ \hline
+    
+    Blood Tests & Mildly elevated troponin \cite{Gianni2006}; significantly elevated BNP/NT-proBNP \cite{GUPTA2018165} & Troponin is much more elevated \cite{Gianni2006}; BNP is usually lower \cite{GUPTA2018165} \\ \hline
+    
+    Echocardiography & Apical ballooning; apex akinetic, base contracts normally \cite{DiazNavarro2021} & Wall motion abnormalities extend beyond one artery's territory \cite{PRASAD2008408} \\ \hline
+    
+    Coronary Angiography / CT & Normal or mildly narrowed coronary arteries \cite{Pelliccia2017} & AMI typically involves occlusion of major arteries \cite{PRASAD2008408} \\ \hline
+    
+    Cardiac MRI & Myocardial edema and hyperemia without late gadolinium enhancement \cite{Kohan2014} & AMI shows necrosis with late gadolinium enhancement \cite{Kohan2014} \\ \hline
+    
+    \end{tabular}
+\end{table}
 
 
+\section{Machine Learning in Medical Imaging}
 
-% \subsection{Traditional Diagnostic Tools}
+Recent years have seen an explosion in the application of \textbf{machine learning (ML)} techniques to medical data, particularly imaging. Machine learning refers to a set of computational methods that enable computers to \textbf{learn patterns from data} and improve their performance on tasks without being explicitly programmed for each rule. A subset of ML, \textbf{deep learning (DL)}, uses multi-layered neural networks to automatically learn hierarchical representations of data. This section provides an introduction to machine learning and deep learning in the context of medical imaging, focusing on convolutional neural networks (CNNs) which are the workhorse for image analysis tasks. We also explain the difference between 2D and 3D CNN approaches and their relevance to analyzing volumetric scans such as CT images.
 
-% The diagnosis of Takotsubo syndrome (TTS) relies on a combination of clinical evaluation, electrocardiography (ECG), biomarker analysis, and advanced imaging to differentiate it from acute myocardial infarction (AMI).
-
-
-% \subsubsection{Electrocardiography (ECG)}
-
-% ECG findings in TTS often mimic AMI, with common abnormalities including ST-segment elevation (43–50\% of cases) and T-wave inversion (50–64\% of cases) \cite{RODRIGUEZ201925}. However, key distinctions exist:
-% \begin{itemize}
-%     \item ST-segment elevation in TTS is less pronounced and lacks reciprocal changes typically seen in AMI \cite{Pelliccia2017}.
-
-%     \item QT interval prolongation is more common in TTS and can help identify patients at risk of arrhythmias \cite{Templin2015}.
-% \end{itemize}
-
-% \subsubsection{Biomarkers}
-% Blood tests reveal:
-
-% \begin{itemize}
-%     \item Troponin levels in TTS are modestly elevated compared to the significant rise observed in AMI, reflecting less myocardial necrosis \cite{Pelliccia2017}.
-%     \item BNP levels are disproportionately high relative to troponin levels, correlating with left ventricular wall stress rather than ischemic injury \cite{Akashi2015}.
-%     \item Markedly elevated NT-proBNP levels, often 3–5× higher than in AMI \cite{GUPTA2018165}.
-% \end{itemize}
-
-% \subsubsection{Echocardiography}
-
-% Transthoracic echocardiography is the first-line imaging tool:
-
-% \begin{itemize}
-%     \item Detects transient left ventricular wall motion abnormalities (e.g., apical ballooning, midventricular hypokinesis) extending beyond a single coronary artery territory \cite{Templin2015}.
-%     \item Identifies complications like left ventricular outflow tract obstruction (LVOTO) or mitral regurgitation \cite{RODRIGUEZ201925,Pelliccia2017}.
-% \end{itemize}
-
-% \subsubsection{Cardiac MRI}
-
-% Cardiac MRI provides critical diagnostic insights:
-% \begin{itemize}
-%     \item Confirms myocardial edema in affected regions (T2-weighted imaging) without late gadolinium enhancement (LGE), distinguishing TTS from AMI or myocarditis \cite{Akashi2015}.
-%     \item Confirms reversibility of systolic dysfunction on follow-up scans \cite{Akashi2015}.
-% \end{itemize}
-
-% \subsubsection{Coronary Angiography}
-
-% Essential to exclude obstructive coronary artery disease (CAD):
-% \begin{itemize}
-%     \item Normal epicardial coronaries in 85\% of cases; non-obstructive CAD may coexist but does not explain wall motion abnormalities \cite{RODRIGUEZ201925}.
-
-%     \item Intravascular ultrasound (IVUS) or optical coherence tomography (OCT) can rule out plaque rupture or thrombus \cite{RODRIGUEZ201925}.
-% \end{itemize}
-
-
-% \subsubsection{Challenges}
-
-% Differentiation from AMI remains difficult due to overlapping clinical and ECG features. Up to 15\% of TTS patients have coexisting CAD, necessitating careful interpretation of angiography \cite{RODRIGUEZ201925}.
-
-
-\section{Machine Learning for medical imaging}
 \subsection{What is Machine Learning?}
-Machine learning (ML) is a branch of artificial intelligence (AI) that enables computers to learn patterns from data without being explicitly programmed. It uses algorithms to identify relationships in datasets, make predictions, or classify information. Common techniques include supervised learning (training models on labeled data) and unsupervised learning (finding hidden patterns in unlabeled data) \cite{sathvik2023machine}.
 
-Key ML methods relevant to medical imaging include:
+In traditional programming, a human defines explicit rules to process data and produce an output. In machine learning, by contrast, the algorithm \textbf{learns the rules or patterns from examples}. In supervised ML (common in medical imaging), we provide the model with input data (e.g., an image) and a desired output (e.g., diagnosis), and the model iteratively adjusts internal parameters to map the input to the correct output. If we have enough examples (training data), the model uncovers statistical patterns that allow it to make predictions on new, unseen data. For instance, an ML model could be trained on many labeled cardiac images (some with TTS, some with AMI) and learn to distinguish them. A classic ML approach might involve manually designing features (like measuring wall motion or shape descriptors) and then using a classifier (like logistic regression or a decision tree) to combine those features. However, manual feature design is challenging for complex images. This is where deep learning revolutionized the field – \textbf{deep neural networks can automatically learn features} directly from raw images, often surpassing human-crafted features in efficacy \cite{lecun2015deep}.
 
-\begin{itemize}
-    \item Convolutional Neural Networks (CNNs): Specialized for analyzing visual data like CT scans by detecting spatial patterns.
-    \item Support Vector Machines (SVMs): Effective for classifying structured data, such as ECG features.
-\end{itemize}
+In medical imaging, ML has been applied to tasks such as detecting tumors in scans, classifying lesions, segmenting organs, etc., with impressive results \cite{litjens2017survey}. Notably, around 2012, deep learning began outperforming previous methods in image recognition, and since then it has become the dominant approach for image analysis \cite{krizhevsky2012imagenet}.
 
-\subsection{Deep Learning and Neural Networks}
+\subsection{Neural Networks and Deep Learning}
 
-Deep learning is a subset of machine learning that employs neural networks with multiple layers (hence "deep") to process data and extract progressively more abstract features. These neural networks are inspired by the structure of the human brain, consisting of interconnected nodes (neurons) organized into layers.
+Neural networks are computational models inspired by the structure of the brain, consisting of layers of interconnected artificial neurons. Each neuron computes a weighted sum of its inputs and passes it through a nonlinear activation function. In a \textbf{deep neural network}, multiple hidden layers allow the model to learn complex hierarchical representations. Deep learning has enabled automatic feature extraction from raw data, eliminating the need for handcrafted features \cite{goodfellow2016deep}.
 
-In a typical deep neural network:
-\begin{itemize}
-    \item The input layer receives the initial data (e.g., CT scan images).
-    \item Multiple hidden layers process the data, extracting increasingly complex features.
-    \item The output layer provides the final prediction or classification.
-\end{itemize}
-
-Deep learning has revolutionized medical imaging analysis due to its ability to automatically learn relevant features from raw image data without requiring manual feature engineering \cite{TODO}. This is particularly valuable in medical imaging where subtle patterns may be difficult for humans to identify or articulate.
-
+In medical imaging, deep learning models—particularly convolutional neural networks—have demonstrated state-of-the-art performance across tasks like detection, classification, segmentation, and registration \cite{shen2017deep}. The success of deep learning is largely attributed to the availability of large annotated datasets, powerful GPUs, and open-source frameworks such as \textbf{PyTorch}, which provide efficient tools for model development and training \cite{paszke2019pytorch}. PyTorch offers dynamic computation graphs, GPU acceleration, and modular APIs, making it a widely used library in the medical imaging research community.
 
 \subsection{Convolutional Neural Networks (CNNs)}
-CNNs are a specialized type of neural network designed specifically for processing grid-like data such as images. They have been instrumental in advancing the field of medical image analysis, including cardiac CT interpretation (Dey et al., 2018) \cite{TODO}.
 
-The key components of a CNN include:
-\begin{enumerate}
-    \item \textbf{Convolutional layers}: These apply filters (kernels) to the input image to detect features such as edges, textures, and shapes. Early layers typically identify simple features, while deeper layers recognize more complex patterns.
+A convolutional neural network is a type of deep learning model specifically designed for grid-like data such as images. In a regular neural network, each input (pixel) connects to neurons in the next layer (fully-connected), which doesn’t scale well to large images. CNNs introduce the concept of \textbf{convolutions} – sliding filters (kernels) across the image to detect local patterns. A CNN typically consists of multiple layers: convolutional layers that apply filters to extract features (like edges, textures, shapes), pooling layers that downsample or summarize regions (for spatial invariance and to reduce computation), and eventually fully-connected layers that make a classification decision based on the extracted features.
 
-    \item \textbf{Pooling layers}: These reduce the spatial dimensions of the data, making the network more computationally efficient and providing a form of translation invariance.
+The convolution operation is key: a small filter (for example 3×3 pixels) is scanned over the image and computes a weighted sum at each position, producing a feature map that highlights where certain features are present. Early layers might detect simple features (edges or blobs), while deeper layers detect complex concepts (like a ventricular shape). The CNN learns the filter weights during training.
 
-    \item \textbf{Fully connected layers}: These combine the features extracted by earlier layers to make the final classification decision.
-\end{enumerate}
+\textbf{2D CNNs} operate on 2D images (height × width), which is ideal for single slice images like chest X-rays or pathology slides. \textbf{3D CNNs} operate on 3D data (height × width × depth), which is suitable for volumetric scans like CT or MRI where an additional dimension (slices or time) provides context \cite{cciccek20163d}.
 
-For 3D medical images like CT scans, 3D CNNs are particularly useful as they can analyze spatial information across all three dimensions, capturing the volumetric nature of the data (Litjens et al., 2017) \cite{TODO}.
+CNNs have become the dominant architecture for medical image analysis because of their ability to automatically learn relevant visual features. For example, if we wanted a CNN to identify Takotsubo Syndrome on an imaging exam, we would feed in a set of scans labeled as TTS or not TTS. The CNN's convolutional filters in early layers might learn to detect shapes like the ballooned apex or ventricular contours, mid-level layers might combine those to detect a pattern of wall motion abnormality, and the final layers would learn to associate those patterns with the diagnosis of TTS. All this is learned from data, rather than explicitly programmed. This ability to learn subtle and complex patterns is crucial in medicine, where differences can be nuanced. Indeed, deep learning algorithms, in particular CNNs, have rapidly become a methodology of choice for analyzing medical images \cite{litjens2017survey}.
+
+\subsection{2D vs. 3D CNNs}
+
+The distinction between 2D and 3D CNNs is important for medical imaging, because many medical images are inherently three-dimensional (like a stack of CT slices). A \textbf{2D CNN} treats input data as flat images. If applied to volumetric data, a 2D CNN would typically either analyze single slices independently or combine results from multiple 2D views. In contrast, a \textbf{3D CNN} can take a volume (a stack of slices) as input and has filters that extend in all three dimensions (x, y, and z). This means a 3D CNN can learn features that depend on the relationship between slices (the depth dimension). For example, in a cardiac CT, a 3D convolution could capture an apical ballooning pattern that spans across several adjacent slices of the heart. A 2D CNN might have to infer such a 3D pattern indirectly or require multiple 2D views.
+
+There are trade-offs: 3D CNNs use more memory and computational power because of the extra dimension in filters and data. They also need more training data to learn the additional parameters. However, they can potentially capture the full spatial context of the anatomy. In tasks like detecting tumors in a CT or analyzing heart function from MRI, 3D CNNs have shown superior accuracy because they evaluate the volumetric context \cite{cciccek20163d}. On the other hand, 2D CNNs can leverage pretrained models from broad image databases (like ImageNet) and may be easier to train with limited data. Sometimes a hybrid approach called “2.5D” is used: for instance, feeding multiple adjacent slices into a 2D CNN (as separate channels) to give it some 3D context without full 3D convolution.
+
+% \textit{Figure~\ref{fig:2d_vs_3d_cnn}} illustrates the difference between 2D and 3D CNN receptive fields.
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\textwidth]{2d_vs_3d_cnn.png}
+%     \caption{Illustration of 2D vs. 3D CNN receptive fields. Adapted from \cite{cciccek20163d}.}
+%     \label{fig:2d_vs_3d_cnn}
+% \end{figure}
+
+For the task of detecting Takotsubo Syndrome in CT scans (which are 3D by nature), a 3D CNN approach could analyze the entire heart volume in one go, potentially learning the three-dimensional shape deformation of the ventricle in TTS. A 2D CNN could be used by analyzing multiple 2D views (like apical 4-chamber, short-axis slices, etc.), but may not capture global shape as directly. Researchers often experiment with both: a 2D CNN might be simpler and need fewer data, while a 3D CNN might capture the telltale features of TTS more holistically if sufficient training data is available \cite{shen2017deep}.
 
 
-\subsection{Existing Work in ML for Takotsubo Syndrome}
-While machine learning has been increasingly applied to cardiovascular imaging, research specifically focused on automated detection of Takotsubo syndrome is relatively limited. Most existing approaches rely on echocardiography or MRI data rather than CT scans.
+\section{Image Segmentation in Cardiac Imaging}
 
-Patil et al. (2020) \cite{TODO} developed an automated system for classifying cardiac diseases from echocardiography images, which included Takotsubo cardiomyopathy among other conditions. Their CNN-based approach achieved promising results but was limited by the small dataset available for this relatively rare condition.
+\subsection{Definition}
+Image segmentation is the process of partitioning an image into meaningful regions. In medical imaging, segmentation typically means delineating anatomical structures or abnormalities – for example, outlining the heart chambers on a CT scan, or segmenting a tumor from healthy tissue. The goal is to assign a label to each pixel or voxel (e.g., “this voxel is part of the left ventricle, this voxel is background”). Segmentation is fundamental because it transforms raw images into quantitative data (such as volumes, shapes, and locations of structures) that can be analyzed or used by diagnostic algorithms. In cardiac imaging, segmentation can isolate the myocardium, ventricles, atria, or even the coronary vessels, enabling measurements of heart function (ejection fraction, wall thickness) and detection of regional motion abnormalities~\cite{Chen2020Deep, suetens2017fundamentals, pham2000current}.
 
-Zhang et al. (2019) \cite{TODO} utilized deep learning to analyze cardiac MRI for detecting wall motion abnormalities, a key feature of Takotsubo syndrome. Their model showed good performance in identifying regional wall motion defects but was not specifically optimized for Takotsubo syndrome.
+\subsection{Importance in Cardiac CT}
+In the context of cardiac CT scans, segmentation is often a crucial preprocessing step. For instance, to detect TTS features, one might first segment the left ventricle from the CT to focus the analysis on the myocardium. Segmentation allows extraction of metrics like left ventricular volume, which could show an akinetic apex (if segmental volumes or motion are calculated). It also enables visualization tools (like overlaying strain or heatmaps on the heart). Furthermore, if one wants to apply machine learning, having segmented structures can reduce the complexity of the task – e.g., the algorithm can analyze just the heart region instead of the whole chest CT. Segmentation is also used for planning treatments (like identifying myocardial scar vs healthy tissue, though that’s more in MRI) and for research (such as measuring the curvature of the LV apex in TTS)~\cite{Chen2020Deep, alnasser2024advancements}.
 
-The gap in current research highlights the opportunity for developing specialized machine learning models for Takotsubo syndrome detection in CT imaging, which is the focus of this project.
+Manual segmentation by expert radiologists or cardiologists is considered the gold standard for accuracy, but it is \textbf{time-consuming and labor-intensive}~\cite{zhuang2013challenges, cardiacatlas2016manual}. Given the complex shape of the heart and possibly low contrast between blood and myocardium on non-contrast scans, manual outlining is tedious. Thus, automated segmentation methods are highly desirable.
+
+\subsection{Segmentation Methods}
+Over the years, various approaches have been developed:
+
+\begin{itemize}
+\item \textbf{Threshold and Region-Based Methods:} Early techniques segment images by intensity thresholds or region growing. For example, in CT, setting a high threshold can segment bones easily (since bone is very bright). For the heart, thresholding might separate blood pool from myocardium if contrast is used. However, classical segmentation methods (thresholding, edge detection, region growing) often struggle with cardiac CT because of \textbf{noise and low contrast} differences between myocardium and surrounding tissues. The heart borders may not be sharply defined and can be confounded by other structures (lungs, liver). These methods lack adaptability – a global threshold might not work across an entire image if lighting varies or if pathologies alter intensities~\cite{kazemifar2014automated, Juergens2008Automated}.
+
+text
+\item \textbf{Contour-Based (Active Contours and Level Sets):} These techniques introduce a deformable model or “snake” that moves under algorithmic guidance to lock onto edges of structures. Active contour models have been widely used in heart segmentation due to their ability to produce smooth, continuous boundaries. For example, one can initialize a contour roughly around the left ventricle and an energy minimization process pulls the contour towards strong edges (the endocardial border). While active contours can be accurate and \textbf{provide continuous boundaries}, they are \textbf{sensitive to initialization and noise}. If the initial guess is far off or the image edges are weak, the contour might converge to an incorrect boundary or require heavy tuning of parameters~\cite{ barba2013comparative, Chen2024Automatic}.
+
+\item \textbf{Statistical Shape Models:} Another approach uses predefined shape models of the heart (perhaps built from annotated datasets) and fits them to the new image. The model knows the typical geometry of a left ventricle, for example, and an algorithm deforms this model to match the image data. This incorporates prior anatomical knowledge and can deal with missing or noisy edges. Shape models have shown some success in whole-heart CT segmentation by ensuring the result is anatomically plausible. But they require a robust training of the shape space and can struggle with unusual patient anatomies (e.g., distorted by cardiomyopathy)~\cite{COOTES199538, ordas2007statistical}.
+
+\item \textbf{Classical Machine Learning:} Before deep learning dominance, some methods extracted features (texture, intensity profiles, gradient magnitude) around each pixel and trained a classifier (like random forest) to decide if a pixel is boundary or interior of a structure. These had some success but often needed extensive feature engineering and didn’t generalize as well to new scanners or populations~\cite{lei2021mri, Criminisi2011DecisionFF}.
+
+\item \textbf{Deep Learning (CNN-based Segmentation):} In the past 5-7 years, \textbf{deep learning segmentation} models have transformed the field. Chief among these is the \textbf{U-Net architecture}, introduced in 2015, which became the de facto standard for biomedical image segmentation. The U-Net is an \textit{encoder-decoder CNN}: the encoder path progressively downsamples the image extracting features (like any CNN), and the decoder path upsamples to produce a segmentation map, with skip connections bridging corresponding levels to retain fine detail. This design allows precise localization (important for segmentation) while utilizing context. U-Net and its variants can automatically segment organs with high accuracy given enough training data. In fact, \textbf{U-Net outperformed prior methods} on many biomedical segmentation challenges and is widely used~\cite{ronneberger2015unet, Chen2020Deep, bernard2018deep}. For cardiac CT, one could train a U-Net to segment the left ventricle, myocardium, atria, etc., by providing enough CT images with ground truth masks. Deep learning models can implicitly learn the shapes and appearance of the heart, including handling of different contrast phases.
+\end{itemize}
+
+\subsection{TotalSegmentator and Whole-Body Segmentation}
+A remarkable recent development is the release of \textbf{TotalSegmentator}, a deep learning model capable of segmenting a wide array of anatomical structures from CT scans automatically. TotalSegmentator was trained on over 1000 CT scans and can segment \textbf{104 anatomical structures} (organs, bones, muscles, vessels, etc.) with high accuracy. It leverages the powerful \textbf{nnU-Net} framework (which automatically optimizes U-Net for a given task) and achieves near human-level performance on many structures~\cite{wasserthal2023totalsegmentator, isensee2021nnunet}. For heart imaging, TotalSegmentator can provide segmentation of the heart, including substructures like ventricles and atria, without any user intervention. This tool is publicly available and can be run quickly (on the order of a couple of minutes for a whole CT).
+
+For our project, using a tool like TotalSegmentator could allow us to automatically extract the heart from chest CT scans, thereby focusing the machine learning analysis on the relevant area for TTS detection. It could also provide precise masks of the left ventricle to compute shape features or apply explainability maps specifically on the myocardium. According to its publication, TotalSegmentator achieved an average Dice similarity coefficient of \textbf{0.94} across its 104 segmented structures on test data, which is extremely high agreement with expert segmentation~\cite{wasserthal2023totalsegmentator}.
+
+\subsection{Segmentation Approaches Comparison}
+To tie together these approaches, Table~\ref{tab:segmentation_comparison} compares different segmentation methods for cardiac CT imaging, highlighting their characteristics.
+
+\begin{table}[H]
+\centering
+\caption{Approaches to Cardiac CT Segmentation – Comparison}
+\label{tab:segmentation_comparison}
+\begin{tabular}{|p{3.5cm}|p{4.5cm}|p{3.5cm}|p{3.5cm}|}
+\hline
+\textbf{Approach} & \textbf{Description and Example} & \textbf{Pros} & \textbf{Cons / Challenges} \\ \hline
+\textbf{Manual Segmentation} & Expert draws contours of heart or regions on CT slices (ground truth standard). & Very accurate (expert knowledge applied); can account for context and anomalies. & \textbf{Labor-intensive}, time-consuming; not feasible for large datasets. Inter-observer variability can occur~\cite{zhuang2013challenges, cardiacatlas2016manual}. \\ \hline
+\textbf{Threshold / Region Growing} & Use intensity threshold to separate structures (e.g., blood vs myocardium), or grow regions from a seed based on similarity. & Simple, fast, no training needed. & Struggles with \textbf{noise and low contrast} differences; often \textit{over-simplistic}~\cite{kazemifar2014automated, Juergens2008Automated}. \\ \hline
+\textbf{Active Contours / Level Sets} & Initialize a contour around LV; it moves to edge boundaries by minimizing energy. & Produces \textbf{smooth, continuous boundaries}; can incorporate prior shape knowledge for accuracy. & \textbf{Sensitive to initialization \& noise}; needs parameter tuning~\cite{barba2013comparative, Chen2024Automatic}. \\ \hline
+\textbf{Statistical Shape Model} & A pre-learned 3D heart shape is fitted to the image data. & Brings \textbf{anatomical plausibility}; good for noisy images. & Requires a representative shape library; may fail on abnormal geometries~\cite{COOTES199538, ordas2007statistical}. \\ \hline
+\textbf{Classical ML (Feature-based)} & Compute features per pixel (intensity, gradient, texture) and use a classifier to label pixels. & More adaptive than global threshold; can incorporate contextual features. & \textbf{Feature engineering} is needed; limited by chosen features~\cite{lei2021mri, Criminisi2011DecisionFF}. \\ \hline
+\textbf{Deep Learning – U-Net (2D)} & Train a 2D U-Net CNN on labeled slices to predict segmentation masks. & \textbf{High accuracy}, learns both low-level and global features automatically. & Needs a \textbf{large annotated dataset} for training; 2D approach may ignore 3D context~\cite{ronneberger2015unet, Chen2020Deep}. \\ \hline
+\textbf{Deep Learning – 3D CNN} & Train a 3D network (like 3D U-Net or nnU-Net) on full or sub-volumes of CT for segmentation. & Uses full \textbf{3D context}; achieves state-of-the-art Dice scores. Fully automatic. & \textbf{Computationally heavy}; requires powerful GPU and more memory~\cite{isensee2021nnunet, wasserthal2023totalsegmentator}. \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Which segmentation approach to use?}
+As seen above, traditional methods had various limitations in the complex scenario of cardiac CT. \textbf{Deep learning approaches, especially 3D CNNs like U-Net/nnU-Net, have largely overcome these issues}, delivering fast and reliable heart segmentation~\cite{ronneberger2015unet, isensee2021nnunet, wasserthal2023totalsegmentator}. For example, TotalSegmentator’s developers reported their model “enables robust and accurate segmentation of 104 structures” and made both the trained model and dataset publicly available.
+
+In practical terms, for our project of using ML to detect TTS, we could use an automated segmentation (like TotalSegmentator or a custom-trained U-Net) to first \textbf{extract the left ventricular myocardium from the CT}. Once we have that, we can compute shape indices or feed the segmented heart into a classification network that decides if it’s TTS or not. This two-step process (segment then classify) can often improve accuracy because the classifier is not distracted by other structures (lungs, ribs, etc.) in the image. Moreover, if we want to measure something like apical-to-basal diameter ratio or ventricular wall thickening, having the segmentation makes it straightforward.
+
+Overall, segmentation turns the qualitative assessment (“apex looks funny”) into quantitative data (we can measure the apex size, motion, etc.). With modern ML, segmentation that once took an expert an hour can be done in seconds by a well-trained network with very high fidelity to manual outlines~\cite{wasserthal2023totalsegmentator, Chen2020Deep}. As a result, segmentation is increasingly a solved component in many imaging pipelines, allowing researchers to focus on interpretation and classification tasks on the segmented outputs.
+
+\section{Existing Work in ML for Takotsubo Syndrome}
+While machine learning has been increasingly applied to cardiovascular imaging, studies specifically focused on Takotsubo syndrome (TTS) remain limited. Most of the existing work has leveraged echocardiography or cardiac MRI, with minimal exploration of CT imaging for this purpose.
+
+\subsection{Echocardiography-Based Approaches}
+\textbf{Laumer et al.}~\cite{laumer2022assessment} developed a deep learning pipeline using convolutional and temporal neural networks to differentiate TTS from acute myocardial infarction (AMI) based on echocardiography videos. Trained on 228 patients and tested on an independent cohort of 220, their model achieved an AUC of 0.79 and outperformed expert cardiologists.
+
+\textbf{Zaman et al.}~\cite{Zaman2023Deep} applied a spatiotemporal CNN to apical 4-chamber echo videos, distinguishing TTS from anterior STEMI with high accuracy. Their interpretability analysis revealed that the model relied on basal segment motion, an underappreciated feature by human readers.
+
+\subsection{Cardiac MRI-Based Approaches}
+\textbf{Mannil et al}.~\cite{Mannil2020Prognostic} extracted texture features from T2-weighted and LGE cardiac MRI of 58 TTS patients to predict 5-year major adverse events. A Naïve Bayes classifier yielded an AUC of 0.88, with edema-based texture features providing the strongest prognostic power.
+
+\textbf{Cau et al.}~\cite{Cau2023Artificial} used non-contrast CMR including strain and tissue mapping data to build a classifier distinguishing TTS from myocarditis and controls. Their ensemble model achieved 92\% sensitivity and an AUC of 0.94, identifying left atrial strain as the most predictive feature.
+
+% \section{Evaluation Metrics}
+
+% To assess model performance in the context of medical diagnosis, appropriate evaluation metrics must be selected. For this binary classification task of identifying Takotsubo syndrome versus normal cardiac function, the following metrics are particularly relevant:
+
+% Accuracy: The proportion of all predictions (both positive and negative) that are correct. While intuitive, accuracy alone can be misleading, especially in imbalanced datasets where one class is much more common than the other.
+
+% Precision: The proportion of positive identifications that are actually correct. This metric answers the question: "Of all cases the model identified as Takotsubo syndrome, how many actually had the condition?"
+
+% Recall (Sensitivity): The proportion of actual positives that are correctly identified. This metric answers: "Of all patients who truly have Takotsubo syndrome, how many did the model correctly identify?"
+
+% F1-score: The harmonic mean of precision and recall, providing a balance between these two metrics. This is particularly useful when seeking a single metric to evaluate performance.
+
+% AUC-ROC (Area Under the Receiver Operating Characteristic curve): A performance measurement for classification problems at various threshold settings. It represents the probability that the model ranks a random positive example higher than a random negative example.
+
+% In a clinical context, the relative importance of these metrics depends on the specific use case. For a rare condition like Takotsubo syndrome, high sensitivity (recall) may be prioritized to ensure cases are not missed, even if it comes at the cost of more false positives that can be ruled out through additional testing.
 
 
-\section{Segmentation in Medical Imaging}
 
-Segmentation in medical imaging refers to the process of partitioning a digital image into multiple segments to simplify and/or change the representation into something more meaningful and easier to analyze. In the context of cardiac imaging, segmentation typically involves isolating the heart or specific cardiac structures from surrounding tissues.
 
-Several approaches to medical image segmentation exist, ranging from traditional methods such as thresholding and region growing to more advanced techniques using machine learning:
+% \section{Evaluation Metrics for TTS Detection in Binary Classification}
 
-Traditional methods: Include thresholding, edge detection, and region-based approaches. These methods are often simple to implement but may struggle with complex anatomical structures.
+% \subsection{Accuracy and Class Imbalance}
+% \textbf{Accuracy} is the proportion of all predictions that are correct, i.e., 
+% \[
+% \text{Accuracy} = \frac{TP + TN}{TP + FP + FN + TN}.
+% \]
+% While accuracy is a common metric due to its simplicity, it can be misleading in contexts of class imbalance \cite{Chicco2020, OwusuAdjei2023}. Takotsubo Syndrome (TTS) is relatively rare, so a classifier could achieve high accuracy by predominantly predicting the absence of TTS (the majority class)\cite{Chicco2020}. However, this would result in many missed TTS cases (false negatives), undermining clinical utility. 
 
-Atlas-based methods: Rely on registering pre-segmented reference images (atlases) to new images. These methods work well for structures with relatively consistent shapes across subjects.
+% In rare disease detection, \textbf{balanced accuracy} or other metrics are often preferred, as they account for both classes more evenly. Balanced accuracy is the average of sensitivity and specificity and avoids inflating performance on imbalanced data \cite{OwusuAdjei2023}. 
 
-Machine learning approaches: Include supervised methods using CNNs like U-Net, which have shown exceptional performance in medical image segmentation tasks (Ronneberger, Fischer and Brox, 2015) \cite{TODO}.
+% \subsection{Sensitivity vs. Specificity}
+% \textbf{Sensitivity} (Recall) is the true positive rate:
+% \[
+% \text{Sensitivity} = \frac{TP}{TP + FN}.
+% \]
+% It reflects how well a test captures TTS patients, minimizing false negatives\cite{Shimizu2022}. \textbf{Specificity}, on the other hand, is the true negative rate:
+% \[
+% \text{Specificity} = \frac{TN}{TN + FP}.
+% \]
+% High specificity ensures that most patients without TTS are correctly ruled out. 
 
-For this project, TotalSegmentator, a tool based on neural networks, is used to segment the heart region from CT scans. This tool provides automated segmentation of multiple organs and structures from CT images, allowing for isolation of the heart prior to analysis by the classification model (Wasserthal et al., 2023) \cite{TODO}.
+% There is an inherent trade-off between sensitivity and specificity. In practice, a diagnostic model for TTS must balance missing a TTS diagnosis (false negatives) versus mislabeling other cardiac events as TTS (false positives). From a safety perspective, high sensitivity is crucial to ensure that TTS cases are not missed. However, specificity is also important to avoid unnecessary interventions in non-TTS patients. Recent TTS AI studies have achieved sensitivity values in the range of 0.85–0.92 and specificity values around 0.76–0.86 \cite{laumer2022assessment,Zaman2023Deep}.
 
-Effective segmentation is crucial as it:
+% \textbf{Negative Predictive Value (NPV)} and \textbf{Positive Predictive Value (PPV)} are also critical in clinical evaluation:
+% \[
+% \text{NPV} = \frac{TN}{TN + FN}, \quad \text{PPV} = \frac{TP}{TP + FP}.
+% \]
+% In a low-prevalence condition like TTS, NPV tends to be naturally high, making it useful for ruling out TTS. Conversely, PPV is typically low unless specificity is very high. Clinically, low PPV can lead to unwarranted anxiety or treatment for patients falsely labeled as TTS. Thus, a diagnostic tool must strive for high PPV by maintaining high specificity.
 
-Reduces computational complexity by focusing the analysis on relevant regions
+% \subsection{Precision, Recall, and F1-Score}
+% In machine learning terminology, \textbf{Precision} is equivalent to PPV, and \textbf{Recall} is equivalent to sensitivity. These metrics are particularly informative in evaluating rare disease classifiers. The \textbf{F1-score}, the harmonic mean of precision and recall, is given by:
+% \[
+% F1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}.
+% \]
+% F1 provides a single measure of test performance by balancing the trade-off between precision and recall. However, like accuracy, F1 can be skewed if used alone. Precision-recall curves and the \textbf{Area Under the Precision-Recall Curve (AUPRC)} are often more informative for rare event classifiers \cite{Saito2015}.
 
-Improves model performance by eliminating confounding information from surrounding tissues
+% \subsection{ROC Curve and AUC}
+% The \textbf{Receiver Operating Characteristic (ROC) curve} plots the trade-off between sensitivity and (1 – specificity) across different classification thresholds. The \textbf{Area Under the ROC Curve (AUC-ROC)} is a threshold-independent summary of classifier performance. AUC-ROC can be interpreted as the probability that the classifier ranks a randomly chosen TTS patient higher than a randomly chosen non-TTS patient. An AUC above 0.80 is generally considered strong in diagnostic settings \cite{hanley1982meaning}. However, with heavy class imbalance, AUC can appear high even if the model underperforms on the minority class. In such cases, AUPRC may be more appropriate.
 
-Enables more precise feature extraction from cardiac structures
+% \subsection{Matthews Correlation Coefficient (MCC) and Overall Performance}
+% Another robust metric is the \textbf{Matthews Correlation Coefficient (MCC)}, which considers all four confusion matrix categories:
+% \[
+% \text{MCC} = \frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}.
+% \]
+% MCC ranges from $-1$ to $+1$ and is often more informative than accuracy or F1-score in imbalanced settings. It has been recommended for medical AI evaluations to avoid overoptimistic results \cite{Chicco2020}.
 
-\section{Evaluation Metrics}
+% MCC is particularly suitable for imbalanced problems like TTS detection, as it considers both positive and negative classes. A model with high MCC ensures that improvements in sensitivity do not come at an extreme cost to specificity (and vice versa). For example, if one model has MCC = 0.60 and another 0.45, the first model has a better overall balance between detecting TTS and avoiding false positives.
 
-% To assess model performance, the following standard metrics will be used:
+% \subsection{Metric Trade-offs in Takotsubo Syndrome Detection}
+% Detecting TTS presents a classic case of imbalanced classification with high-stakes trade-offs. Clinically, the cost of a false negative (missed TTS) can be significant, while false positives could lead to unnecessary interventions. Many studies prioritize maximizing sensitivity to ensure nearly all true TTS cases are identified, while maintaining adequate specificity to ensure positive diagnoses are actionable \cite{cau2023diagnostic, mannil2020prognostic}.
+
+% In summary, evaluating a TTS detection model requires a multi-faceted approach:
 % \begin{itemize}
-%     \item Accuracy – Overall correctness of the model.
-%     \item Precision – Proportion of positive predictions that are actually correct.
-%     \item Recall (Sensitivity) – Ability to correctly identify positive cases.
-%     \item F1-score – Harmonic mean of precision and recall.
-%     \item AUC-ROC – Performance measurement for classification problems.
+%     \item \textbf{Sensitivity and NPV}: To ensure few cases are missed.
+%     \item \textbf{Specificity and PPV}: To ensure positive diagnoses are accurate.
+%     \item \textbf{F1 or MCC}: To summarize the balance between precision and recall.
+%     \item \textbf{AUC-ROC and AUPRC}: To gauge overall discriminative power.
 % \end{itemize}
-
-To assess model performance in the context of medical diagnosis, appropriate evaluation metrics must be selected. For this binary classification task of identifying Takotsubo syndrome versus normal cardiac function, the following metrics are particularly relevant:
-
-Accuracy: The proportion of all predictions (both positive and negative) that are correct. While intuitive, accuracy alone can be misleading, especially in imbalanced datasets where one class is much more common than the other.
-
-Precision: The proportion of positive identifications that are actually correct. This metric answers the question: "Of all cases the model identified as Takotsubo syndrome, how many actually had the condition?"
-
-Recall (Sensitivity): The proportion of actual positives that are correctly identified. This metric answers: "Of all patients who truly have Takotsubo syndrome, how many did the model correctly identify?"
-
-F1-score: The harmonic mean of precision and recall, providing a balance between these two metrics. This is particularly useful when seeking a single metric to evaluate performance.
-
-AUC-ROC (Area Under the Receiver Operating Characteristic curve): A performance measurement for classification problems at various threshold settings. It represents the probability that the model ranks a random positive example higher than a random negative example.
-
-In a clinical context, the relative importance of these metrics depends on the specific use case. For a rare condition like Takotsubo syndrome, high sensitivity (recall) may be prioritized to ensure cases are not missed, even if it comes at the cost of more false positives that can be ruled out through additional testing.
+% By examining these metrics, researchers and clinicians can better understand a model’s performance and its potential impact on TTS patient care.
 
 
-\section{Explainability in AI for Medical Diagnosis}
 
-\subsection{Importance of Explainability}
-In medical applications of artificial intelligence, the ability to explain how a model arrives at its decisions—known as explainability or interpretability—is not merely a technical consideration but an ethical and practical necessity. This is particularly important for several reasons:
+\section{Evaluation Metrics for Classification}
 
-Clinical trust: Healthcare practitioners are more likely to incorporate AI recommendations into their decision-making process if they understand the reasoning behind them.
+When developing machine learning models, especially for a task like binary classification (TTS vs non-TTS), it is crucial to assess their performance using appropriate \textbf{evaluation metrics}. Different metrics capture different aspects of performance, and in medical applications – particularly for a relatively rare condition like TTS – choosing the right metric is important. Here we explain common classification metrics (Accuracy, Precision, Recall, F1-Score, AUC-ROC) and discuss why, for Takotsubo detection, an emphasis on sensitivity (recall) might be warranted \cite{Chicco2020, Laumer2022, Shimizu2022}.
 
-Regulatory compliance: Many regulatory frameworks for medical devices, including those incorporating AI, require some level of transparency in how decisions are reached.
+\subsection{Accuracy}
+Accuracy is the simplest metric – it is the proportion of all instances that the model correctly classified. If we have $TP$ true positives, $TN$ true negatives, $FP$ false positives, and $FN$ false negatives, then:
+\[
+\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}.
+\]
+For example, if a model evaluated 100 cases (10 were TTS, 90 were not) and it correctly identified 8 of the TTS and 85 of the non-TTS, the accuracy would be:
+\[
+\frac{8 + 85}{100} = 93\%.
+\]
+While accuracy seems intuitive, it can be misleading in imbalanced datasets \cite{Chicco2020, OwusuAdjei2023}. In our example, 93\% accuracy sounds high, but note that if the model simply guessed ``non-TTS'' for all 100 cases, it would be 90\% accurate by default (since 90 were not TTS). So accuracy alone does not tell us how well the model is doing on the positive (TTS) cases. In contexts like TTS detection, where TTS cases might be much fewer than non-cases in screening, a high accuracy can be achieved by trivially predicting the majority class, which is not useful clinically \cite{Sokolova2009}.
 
-Error identification: Explainable models make it easier to identify when a model is making predictions based on spurious correlations or artifacts in the data rather than clinically relevant features.
+\subsection{Precision (Positive Predictive Value)}
+Precision is the fraction of positive predictions that are actually correct:
+\[
+\text{Precision} = \frac{TP}{TP + FP}.
+\]
+That is, out of all cases the model labeled as ``TTS,'' how many were truly TTS. Precision answers: ``When the model says TTS, how often is it right?'' A high precision means false positives are low – the model does not cry wolf often. In our example, if the model labeled 10 cases as TTS and 8 were correct (2 were falsely labeled TTS), precision would be:
+\[
+\frac{8}{10} = 0.8 \ (80\%).
+\]
+Precision is important clinically because a low precision would mean many patients are being falsely told they might have TTS, which could lead to unnecessary stress or tests. However, precision must be balanced with recall \cite{Powers2011}.
 
-Patient communication: Clinicians need to be able to explain diagnostic rationales to patients, including when AI systems contribute to those diagnoses.
+\subsection{Recall (Sensitivity or True Positive Rate)}
+Recall (also called \textbf{sensitivity} in medical terms) is the fraction of actual positives that the model correctly identified:
+\[
+\text{Recall} = \frac{TP}{TP + FN}.
+\]
+It answers: ``Out of all real TTS patients, how many did the model catch?'' Using the example, recall would be:
+\[
+\frac{8}{8 + 2} = 0.8 \ (80\%),
+\]
+if the model caught 8 of 10 TTS cases. High recall means the model misses very few TTS cases (few false negatives). In rare disease detection, \textbf{recall is often considered paramount} – missing a case (false negative) could mean a patient does not get needed treatment \cite{Altman1994, Shimizu2022}. For TTS, a false negative might mean we mistakenly think a patient’s chest pain was something else and not monitor them for TTS complications. Generally, in critical diagnoses, we want recall to be as high as possible, even if it means tolerating some false positives \cite{Laumer2022}.
 
-Continuous improvement: Understanding why a model makes certain predictions facilitates targeted improvements to the model or identifies scenarios where human oversight is particularly important.
+\subsection{Specificity (True Negative Rate)}
+Specificity is the counterpart to sensitivity – the fraction of actual negatives correctly identified:
+\[
+\text{Specificity} = \frac{TN}{TN + FP}.
+\]
+It answers: ``Out of all non-TTS cases, how many did the model correctly say are not TTS?'' High specificity means few false alarms \cite{Akobeng2007}. Precision and specificity are related but not identical (specificity considers all negatives whereas precision considers just the predicted positives). Specificity might be important to avoid overloading clinicians with false alarms. In practice, one balances sensitivity and specificity based on clinical needs \cite{Zweig1993}.
 
-For a model detecting Takotsubo syndrome, explainability could help clinicians understand which cardiac features the model is identifying as characteristic of the condition, potentially enhancing both the model's utility and the physician's diagnostic process.
+\subsection{F1-Score}
+The F1-score is the harmonic mean of precision and recall:
+\[
+F1 = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}.
+\]
+It provides a single measure that balances both precision and recall. In our example with precision = 0.8 and recall = 0.8, the F1-score would be:
+\[
+F1 = 0.8.
+\]
+The F1-score is useful when we seek a balance or when comparing models – it ensures a model is only rated highly if both precision and recall are reasonably good. A model with extremely high precision but low recall (or vice versa) will have an F1 closer to the lower number. In rare event detection, often one can trade off precision vs recall by adjusting decision thresholds, and F1 can help find a sweet spot \cite{Sokolova2009}. However, F1 also assumes equal importance of precision and recall, which might not be true in all contexts (sometimes recall is more valued).
 
-\subsection{Techniques: Grad-CAM and SHAP}
-% Techniques such as:
-% \begin{itemize}
-%     \item Grad-CAM – Visualizing model focus areas in CT images.
-%     \item SHAP (Shapley Additive Explanations) – Understanding feature importance in predictions.
-% \end{itemize}
-% will be explored to make the model's decisions more interpretable.
+\subsection{ROC Curve and AUC}
+The Receiver Operating Characteristic (ROC) curve is a plot of the model’s \textbf{True Positive Rate (Recall)} against the \textbf{False Positive Rate} for various threshold settings \cite{Fawcett2006}. As we tune a model to be more sensitive (catch more TTS), typically it will also raise more false alarms, so we get a trade-off. The ROC curve shows this trade-off across all sensitivity settings. Each point on the ROC curve corresponds to a particular threshold of the model’s output at which we classify a case as positive. The \textbf{Area Under the ROC Curve (AUC-ROC)} is a summary metric that essentially gives the probability that the model will rank a randomly chosen positive case higher than a randomly chosen negative case \cite{Bradley1997}. An AUC of 0.5 means no better than chance, 1.0 means perfect separation. AUC is useful to compare models irrespective of a specific threshold, and is often used in machine learning research \cite{Saito2015}.
 
-Several techniques have been developed to enhance the explainability of deep learning models in medical imaging. Two particularly relevant approaches for this project are:
+\subsection{Trade-offs in TTS Detection}
+Consider a scenario with 200 patients, where 10 have Takotsubo syndrome (TTS). A high-recall model might identify all 10 cases (recall 100\%) but flag 5 false positives, resulting in Precision = $10/(10+5) = 67\%$ and Accuracy = $195/200 = 97.5\%$. Another model might be more conservative, identifying 8 true positives (recall 80\%) with no false positives, giving Precision = 100\% and Accuracy = $198/200 = 99\%$. 
 
-\subsubsection{Gradient-weighted Class Activation Mapping (Grad-CAM)}
+Which is better? The first model misses no TTS cases but has some false alarms, while the second misses 2 cases but avoids false positives. Clinically, the first model is often preferred, as missing no cases is critical, even at the cost of a few false alarms. This highlights the importance of prioritizing recall and precision over accuracy in TTS detection.
 
-Grad-CAM is a technique that produces visual explanations for decisions made by CNNs by highlighting regions in an image that are important for prediction. It uses the gradients flowing into the final convolutional layer to produce a coarse localization map highlighting important regions in the image for predicting the target concept (Selvaraju et al., 2017) \cite{TODO}.
+AUC-ROC for the first model may also be higher, as it demonstrates the ability to identify all positives at some threshold. For TTS detection, high recall with acceptable precision is typically the goal.
 
-For CT scan analysis, Grad-CAM can generate heatmaps that highlight which regions of the heart the model focuses on when making a Takotsubo syndrome diagnosis. This visualization helps clinicians understand whether the model is appropriately focusing on relevant cardiac structures, such as the left ventricle where the characteristic ballooning occurs.
+\section{Explainability in Medical AI}
+\label{sec:explainability}
+The use of artificial intelligence (AI) in clinical settings requires not only high performance but also transparency. Deep learning models, particularly convolutional neural networks (CNNs), are often considered "black boxes" due to their lack of interpretability. However, in medicine, clinicians must be able to understand and trust the AI’s decisions, especially when those decisions influence diagnosis or treatment \cite{holzinger2017we, gilpin2018explaining}.
 
-\subsubsection{SHapley Additive exPlanations (SHAP)}
+Explainability techniques help address this issue by providing insight into how and why a model arrives at a specific prediction. This is crucial in high-stakes domains like cardiology, where incorrect predictions can have severe consequences \cite{tjoa2020survey}. Moreover, explainability supports regulatory compliance, clinical adoption, and improved patient communication \cite{samek2017explainable}.
 
-SHAP is based on game theory and provides a unified measure of feature importance. It assigns each feature an importance value for a particular prediction. In the context of medical imaging, SHAP values can help quantify how each part of an image contributes to the model's decision (Lundberg and Lee, 2017) \cite{TODO}.
+\subsection{Grad-CAM for Visual Explanations}
+Gradient-weighted Class Activation Mapping (Grad-CAM) is a widely used method for visualizing which parts of an input image influenced a CNN’s decision \cite{selvaraju2017grad}. Grad-CAM generates heatmaps by backpropagating the gradients of a specific class prediction through the model’s final convolutional layers. The result is a coarse localization map that highlights the most relevant regions of the image.
 
-For the Takotsubo syndrome detection model, SHAP can help determine which features of the CT scan most strongly influence the classification decision. This could potentially reveal biomarkers or imaging characteristics that might not be obvious to human observers but are predictive of the condition.
+In the context of Takotsubo Syndrome (TTS), a model using Grad-CAM can produce a heatmap over the CT scan indicating which areas of the heart contributed to the prediction. For example, if the apical region of the left ventricle is highlighted, this can align with clinical expectations, as this region is commonly affected in TTS. Such visual explanations make it easier for clinicians to validate AI outputs and integrate them into their diagnostic process \cite{holzinger2017we}.
 
-By implementing these explainability techniques, the project aims to create not just an accurate classification model, but one that contributes to medical understanding of Takotsubo syndrome's presentation in CT imaging and builds trust with clinicians who would utilize such a system.
+Beyond building trust, Grad-CAM can reveal model errors. If the heatmap consistently highlights irrelevant regions—such as image artifacts—it may indicate spurious correlations learned during training. Identifying and correcting such issues helps ensure the model is making decisions for medically valid reasons \cite{arun2021assessing}.
+
 
 \chapter{Design}
 \section{Dataset Overview}
